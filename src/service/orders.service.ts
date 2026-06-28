@@ -38,6 +38,21 @@ export const getOrders = async (params: GetOrdersParams = {}) => {
 }
 
 
+export const deleteOrderById = async (id: string) => {
+    const auth = getLocalStorage<IAuthData | null>("auth", null);
+    const token = auth?.token;
+    let Url = `${environment.API_URL}/orders/${id}`
+
+    const result = await fetchAPI(Url, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return result
+}
+
+
 export const getOrderById = async (id: string) => {
     const auth = getLocalStorage<IAuthData | null>("auth", null);
     const token = auth?.token;

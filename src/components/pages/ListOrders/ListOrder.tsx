@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { getOrders, updateOrder } from "../../../service/orders.service";
+import {
+  deleteOrderById,
+  getOrders,
+  updateOrder,
+} from "../../../service/orders.service";
 import type { IOrders } from "../../../types/orders";
 import Button from "../../ui/Button";
 import { Link, useNavigate } from "react-router-dom";
@@ -33,6 +37,15 @@ const ListOrder = () => {
   const handleComplatedOrder = async (id: string) => {
     try {
       await updateOrder(id, { status: "COMPLETED" });
+      setRefetchOrder(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeleteOrder = async (id: string) => {
+    try {
+      await deleteOrderById(id);
       setRefetchOrder(true);
     } catch (error) {
       console.log(error);
@@ -153,7 +166,9 @@ const ListOrder = () => {
 
                         {order.status === "COMPLETED" && (
                           <Button
-                            onClick={() => {}}
+                            onClick={() => {
+                              handleDeleteOrder(order.id);
+                            }}
                             className="p-1.5 rounded-md text-gray-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
                           >
                             Hapus
